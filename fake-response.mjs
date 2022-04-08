@@ -44,20 +44,17 @@ export class FakeResponse {
 		return this.getHeader('content-type') ?? 'text/html';
 	}
 
-	makeLambdaOutput(body) {
+	makeLambdaOutput() {
 		let output = {
 			statusCode: this._status,
 			headers: this.headers,
 		}
-		let contentType = this.getContentType();
+		let contentType = this.getContentType() ?? '';
 		if (contentType.startsWith('text/') || contentType === 'application/json') {
 			output = {
 				...output,
 				isBase64Encoded: false,
-				body: contentType === 'application/json' ? JSON.stringify({
-					status: "ok",
-					...body,
-				}, null, 2) : body
+				body: this.response
 			}
 		} else {
 			output = {

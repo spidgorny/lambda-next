@@ -1,0 +1,36 @@
+service: lambda-next-dlc-search
+configValidationMode: error
+
+provider:
+  name: aws
+  region: eu-central-1
+  stage: dev
+  memorySize: 256
+  runtime: nodejs14.x
+  environment:
+
+plugins:
+  - serverless-bundle
+
+custom:
+  bundle:
+    copyFiles:
+      - from: '../.next/server'
+        to: './.next/server'
+      - from: '../.next/static'
+        to: './.next/static'
+      - from: '../public'
+        to: './public'
+
+functions:
+  anyPath:
+    handler: handler.server
+    events:
+      - http:
+          path: /
+          method: ANY
+          cors: true
+      - http:
+          path: "{anyPath+}"
+          method: ANY
+          cors: true

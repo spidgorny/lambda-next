@@ -31,10 +31,14 @@ async function debugHandler(event) {
 	const {path, httpMethod, headers, pathParameters, queryStringParameters} = event;
 	// console.log(process.env);
 
-	const files = fs.readdirSync('.next');
+	const filesNext = fs.readdirSync('.next');
+	const filesStatic = fs.readdirSync('.next/static');
+	const filesPublic = fs.readdirSync('public');
 	const body = {
 		path, httpMethod, pathParameters, queryStringParameters,
-		files,
+		filesNext,
+		filesStatic,
+		filesPublic,
 		runtime: (new Date() - start) / 1000,
 	}
 	return makeJsonOutput(body);

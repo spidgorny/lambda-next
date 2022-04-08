@@ -22,8 +22,9 @@ export async function lambdaRouter(req, res) {
 		}
 
 		await handleIndex(path, res);
-		await handlePublic(path, res);
-
+		if (!res.headersSent) {
+			await handlePublic(path, res);
+		}
 		if (!res.headersSent) {
 			throw new Error('404 Not Found');
 		}
@@ -37,12 +38,12 @@ export async function lambdaRouter(req, res) {
 }
 
 async function handleIndex(pathName = 'index.html', res) {
-	console.log({pathName});
+	console.log('handleIndex', {pathName});
 	if (!pathName || pathName === '/') {
-		pathName = 'index.html';
+		pathName = '/index.html';
 	}
 	const fullPath = path.resolve("./.next/server/pages/", pathName.replace('/', ''));
-	console.log({fullPath});
+	console.log('handleIndex', {fullPath});
 	try {
 		const html = fs.readFileSync(fullPath, 'utf8');
 		return res.send(html);
@@ -54,7 +55,7 @@ async function handleIndex(pathName = 'index.html', res) {
 
 async function handleNextStatic(pathName, res) {
 	const fullPath = path.resolve("./.next/static/", pathName.replace('/_next/static/', ''));
-	console.log(fullPath)
+	console.log('handleNextStatic', fullPath)
 	const html = fs.readFileSync(fullPath, 'utf8');
 	return res.send(html);
 }
@@ -63,7 +64,7 @@ async function handlePublic(pathName, res) {
 	const fullPath = path.resolve("./public/", pathName.replace('/', ''));
 	try {
 		const mimeType = mime.lookup(fullPath);
-		console.log({fullPath, mimeType});
+		console.log('handlePublic', {fullPath, mimeType});
 		res.header('content-type', mimeType);
 		const html = fs.readFileSync(fullPath, 'utf8');
 		return res.send(html);

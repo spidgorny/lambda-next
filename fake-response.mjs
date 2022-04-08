@@ -18,8 +18,14 @@ export class FakeResponse {
 		return this;
 	}
 
+	header(key, val) {
+		this.setHeader(key, val);
+		return this;
+	}
+
 	setHeader(key, val) {
 		this.headers[key] = val;
+		return this;
 	}
 
 	getHeader(key) {
@@ -28,6 +34,10 @@ export class FakeResponse {
 				.map(([key, val]) => [key.toLowerCase(), val])
 		);
 		return lcKeys[key.toLowerCase()];
+	}
+
+	get headersSent() {
+		return Object.keys(this.headers).length;
 	}
 
 	getContentType() {
@@ -40,7 +50,7 @@ export class FakeResponse {
 			headers: this.headers,
 		}
 		let contentType = this.getContentType();
-		if (contentType.startsWith('text') || contentType === 'application/json') {
+		if (contentType.startsWith('text/') || contentType === 'application/json') {
 			output = {
 				...output,
 				isBase64Encoded: false,

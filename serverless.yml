@@ -2,6 +2,7 @@ service: lambda-next-dlc-search
 configValidationMode: error
 
 provider:
+  profile: slawa
   name: aws
   region: eu-central-1
   stage: dev
@@ -15,11 +16,11 @@ plugins:
 custom:
   bundle:
     copyFiles:
-      - from: '../.next/server'
+      - from: './.next/server'
         to: './.next/server'
-      - from: '../.next/static'
+      - from: './.next/static'
         to: './.next/static'
-      - from: '../public'
+      - from: './public'
         to: './public'
 
 functions:

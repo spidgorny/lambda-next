@@ -1,7 +1,7 @@
 import fs from 'fs';
 import {FakeRequest} from "./fake-request.mjs";
 import {FakeResponse} from "./fake-response.mjs";
-import {lambdaRouter} from "./router.mjs";
+import { lambdaRouter, makeJsonOutput } from "./router.mjs";
 
 exports.server = async (event) => {
 	try {
@@ -42,20 +42,4 @@ async function debugHandler(event) {
 		runtime: (new Date() - start) / 1000,
 	}
 	return makeJsonOutput(body);
-}
-
-function makeJsonOutput(body) {
-	let output = {
-		statusCode: 200,
-		headers: {
-			'content-type': 'application/json',
-		},
-		isBase64Encoded: false,
-		body: JSON.stringify({
-			status: "ok",
-			...body,
-		}, null, 2)
-	};
-	console.log(output);
-	return output;
 }

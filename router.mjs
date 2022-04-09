@@ -22,12 +22,13 @@ export async function lambdaRouter(req, res) {
 		}
 
 		await handleIndex(path, res);
-		if (!res.headersSent) {
+		if (!res.response) {
 			await handlePublic(path, res);
 		}
-		if (!res.headersSent) {
+		if (!res.response) {
 			throw new Error('404 Not Found');
 		}
+		return res;
 	} catch (e) {
 		return res.send(JSON.stringify({
 			status: e.constructor.name ?? 'error',
@@ -53,7 +54,7 @@ async function handleIndex(pathName = 'index.html', res) {
 	}
 }
 
-async function handleNextStatic(pathName, res) {
+export async function handleNextStatic(pathName, res) {
 	const fullPath = path.resolve("./.next/static/", pathName.replace('/_next/static/', ''));
 	console.log('handleNextStatic', fullPath)
 	const html = fs.readFileSync(fullPath, 'utf8');
@@ -67,6 +68,7 @@ async function handlePublic(pathName, res) {
 		console.log('handlePublic', {fullPath, mimeType});
 		res.header('content-type', mimeType);
 		const html = fs.readFileSync(fullPath, 'utf8');
+		console.log('handlePublic', {html: html.length});
 		return res.send(html);
 	} catch (e) {
 		console.error('ERROR', 'handlePublic', e.message);
@@ -120,4 +122,20 @@ function fileExists(filePath) {
 	} catch (e) {
 		return false;
 	}
+}
+
+export function makeJsonOutput(body) {
+	let output = {
+		statusCode: 200,
+		headers: {
+			'content-type': 'application/json',
+		},
+		isBase64Encoded: false,
+		body: JSON.stringify({
+			status: "ok",
+			...body,
+		}, null, 2)
+	};
+	console.log(output);
+	return output;
 }

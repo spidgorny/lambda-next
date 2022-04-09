@@ -1,7 +1,11 @@
+import { makeJsonOutput } from "./router.mjs";
+
 export class FakeResponse {
 	_status = 200;
 	response;
-	headers = {};
+	headers = {
+		'content-type': 'text/plain'
+	};
 
 	status(x) {
 		this._status = x;
@@ -14,7 +18,8 @@ export class FakeResponse {
 	}
 
 	json(x) {
-		this.response = JSON.stringify(x, null, 2);
+		this.response = x;
+		this.setHeader('content-type', 'application/json');
 		return this;
 	}
 
@@ -33,6 +38,7 @@ export class FakeResponse {
 			Object.entries(this.headers)
 				.map(([key, val]) => [key.toLowerCase(), val])
 		);
+		console.log({lcKeys, key: key.toLowerCase()});
 		return lcKeys[key.toLowerCase()];
 	}
 
@@ -41,7 +47,7 @@ export class FakeResponse {
 	}
 
 	getContentType() {
-		return this.getHeader('content-type') ?? 'text/html';
+		return this.getHeader('content-type') ?? '';
 	}
 
 	makeLambdaOutput() {
@@ -50,7 +56,10 @@ export class FakeResponse {
 			headers: this.headers,
 		}
 		let contentType = this.getContentType() ?? '';
-		if (contentType.startsWith('text/') || contentType === 'application/json') {
+		if (contentType === 'application/json') {
+			return makeJsonOutput(this.response);
+		}
+		if (contentType.startsWith('text/')) {
 			output = {
 				...output,
 				isBase64Encoded: false,
@@ -67,4 +76,3 @@ export class FakeResponse {
 		return output;
 	}
 }
-

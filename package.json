@@ -1,7 +1,9 @@
 {
+  "type": "module",
   "scripts": {
-    "prepare": "rm -rf .next && cp -r /c/dev/2021-xps/json-business/site/.next .",
-    "sls:deploy": "sls deploy",
+    "dev": "node lambda-express.mjs",
+    "prepare": "rm -rf .next && cp -r /c/dev/2021-xps/json-business/site/.next . && cp -r /c/dev/2021-xps/json-business/site/public .",
+    "sls:deploy": "sls deploy --verbose --stage prod",
     "sls:logs": "sls logs -f anyPath -t"
   },
   "devDependencies": {
@@ -10,6 +12,7 @@
   "dependencies": {
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
-    "mime-types": "^2.1.35"
+    "mime-types": "^2.1.35",
+    "serverless-dotenv": "^1.0.0-beta.2"
   }
 }

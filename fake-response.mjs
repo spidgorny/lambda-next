@@ -43,7 +43,7 @@ export class FakeResponse {
 	}
 
 	get headersSent() {
-		return Object.keys(this.headers).length;
+		return Object.keys(this.headers).length || this.response;
 	}
 
 	getContentType() {

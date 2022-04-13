@@ -12,6 +12,7 @@ provider:
 
 plugins:
   - serverless-bundle
+  - serverless-dotenv
 
 custom:
   bundle:
@@ -27,11 +28,11 @@ functions:
   anyPath:
     handler: handler.server
     events:
-      - http:
+      - httpApi:
           path: /
           method: ANY
-          cors: true
-      - http:
-          path: "{anyPath+}"
-          method: ANY
-          cors: true
+#          cors: true
+#      - httpApi:
+#          path: "{anyPath+}"
+#          method: ANY
+#          cors: true

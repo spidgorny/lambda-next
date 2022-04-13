@@ -3,11 +3,13 @@ import {FakeRequest} from "./fake-request.mjs";
 import {FakeResponse} from "./fake-response.mjs";
 import { lambdaRouter, makeJsonOutput } from "./router.mjs";
 
-exports.server = async (event) => {
+export const server = async (event) => {
 	try {
+		// return makeJsonOutput(event);
 		const {requestContext, headers, multiValueHeaders, ...eventProps} = event;
 		console.log(eventProps);
-		const {path} = event;
+		const {http} = requestContext;
+		const {method, path} = http;
 		if (path === '/debug') {
 			return debugHandler(event);
 		}
@@ -25,7 +27,7 @@ exports.server = async (event) => {
 	}
 }
 
-async function debugHandler(event) {
+export async function debugHandler(event) {
 	const start = new Date();
 	// console.log(event);
 	const {path, httpMethod, headers, pathParameters, queryStringParameters} = event;

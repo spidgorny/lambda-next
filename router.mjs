@@ -2,13 +2,14 @@ import path from "path";
 import fs from "fs";
 import * as mime from "mime-types";
 import {FakeResponse} from "./fake-response.mjs";
+import { debugHandler } from "./handler.mjs";
 
 export async function lambdaRouter(req, res) {
 	try {
 		const {path, method} = req;
 		console.warn('<', method, path)
 		if (path.startsWith('/_next/static')) {
-			await handleNextStatic(path, res);
+			return await handleNextStatic(path, res);
 		}
 		if (path.startsWith('/_next/image')) {
 			//await handleNextImage(path, res);
@@ -22,14 +23,16 @@ export async function lambdaRouter(req, res) {
 		}
 
 		await handleIndex(path, res);
-		if (!res.response) {
+		if (!res.headersSent) {
 			await handlePublic(path, res);
 		}
-		if (!res.response) {
+		if (!res.headersSent) {
 			throw new Error('404 Not Found');
 		}
 		return res;
 	} catch (e) {
+		console.error(e);
+		res.type = 'json';
 		return res.send(JSON.stringify({
 			status: e.constructor.name ?? 'error',
 			message: e.message,
@@ -44,9 +47,12 @@ async function handleIndex(pathName = 'index.html', res) {
 		pathName = '/index.html';
 	}
 	const fullPath = path.resolve("./.next/server/pages/", pathName.replace('/', ''));
-	console.log('handleIndex', {fullPath});
+	const mimeType = mime.lookup(fullPath);
+	console.log('handleIndex', {fullPath, mimeType});
 	try {
 		const html = fs.readFileSync(fullPath, 'utf8');
+		console.log('handlePublic', {fullPath, mimeType});
+		res.header('content-type', mimeType);
 		return res.send(html);
 	} catch (e) {
 		console.error('ERROR', 'handleIndex', e.message);
@@ -56,7 +62,9 @@ async function handleIndex(pathName = 'index.html', res) {
 
 export async function handleNextStatic(pathName, res) {
 	const fullPath = path.resolve("./.next/static/", pathName.replace('/_next/static/', ''));
-	console.log('handleNextStatic', fullPath)
+	const mimeType = mime.lookup(fullPath);
+	console.log('handleNextStatic', {fullPath, mimeType});
+	res.header('content-type', mimeType);
 	const html = fs.readFileSync(fullPath, 'utf8');
 	return res.send(html);
 }
@@ -136,6 +144,6 @@ export function makeJsonOutput(body) {
 			...body,
 		}, null, 2)
 	};
-	console.log(output);
+	// console.log(output);
 	return output;
 }

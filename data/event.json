@@ -1,0 +1,47 @@
+{
+  "status": "ok",
+  "version": "2.0",
+  "routeKey": "$default",
+  "rawPath": "/debug",
+  "rawQueryString": "",
+  "headers": {
+    "sec-fetch-mode": "navigate",
+    "sec-fetch-site": "none",
+    "accept-language": "en-US,en;q=0.9,nl-NL;q=0.8,nl;q=0.7",
+    "x-forwarded-proto": "https",
+    "x-forwarded-port": "443",
+    "dnt": "1",
+    "x-forwarded-for": "2001:8a0:6053:f900:8d12:c7e7:8c7a:4c89",
+    "sec-fetch-user": "?1",
+    "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+    "sec-ch-ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"100\", \"Google Chrome\";v=\"100\"",
+    "sec-ch-ua-mobile": "?0",
+    "x-amzn-trace-id": "Root=1-6256b881-4cc332530a3ef8b137c66309",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "host": "2q6y5styj52afdpc7324sknfde0erkdv.lambda-url.eu-central-1.on.aws",
+    "upgrade-insecure-requests": "1",
+    "cache-control": "max-age=0",
+    "accept-encoding": "gzip, deflate, br",
+    "sec-fetch-dest": "document",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36"
+  },
+  "requestContext": {
+    "accountId": "anonymous",
+    "apiId": "2q6y5styj52afdpc7324sknfde0erkdv",
+    "domainName": "2q6y5styj52afdpc7324sknfde0erkdv.lambda-url.eu-central-1.on.aws",
+    "domainPrefix": "2q6y5styj52afdpc7324sknfde0erkdv",
+    "http": {
+      "method": "GET",
+      "path": "/debug",
+      "protocol": "HTTP/1.1",
+      "sourceIp": "2001:8a0:6053:f900:8d12:c7e7:8c7a:4c89",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36"
+    },
+    "requestId": "7f18a658-2629-48c8-8fa0-ea7878af862c",
+    "routeKey": "$default",
+    "stage": "$default",
+    "time": "13/Apr/2022:11:48:17 +0000",
+    "timeEpoch": 1649850497099
+  },
+  "isBase64Encoded": false
+}

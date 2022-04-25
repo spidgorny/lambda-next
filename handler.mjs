@@ -2,6 +2,8 @@ import fs from 'fs';
 import {FakeRequest} from "./fake-request.mjs";
 import {FakeResponse} from "./fake-response.mjs";
 import { lambdaRouter, makeJsonOutput } from "./router.mjs";
+import next from "next";
+import { parse } from "url";
 
 export const server = async (event) => {
 	try {
@@ -16,7 +18,16 @@ export const server = async (event) => {
 
 		const req = new FakeRequest(event);
 		const res = new FakeResponse();
-		await lambdaRouter(req, res);
+		// await lambdaRouter(req, res);
+
+		const dev = process.env.NODE_ENV !== 'production';
+		const app = next({dev,
+			// dir: '.next/server'
+		});
+		const handle = app.getRequestHandler();
+		const parsedUrl = parse(req.url, true);
+		await handle(req, res, parsedUrl);
+
 		return res.makeLambdaOutput();
 	} catch (e) {
 		return makeJsonOutput({

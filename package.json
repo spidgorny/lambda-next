@@ -1,10 +1,11 @@
 {
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "dev": "node lambda-express.mjs",
     "prepare": "rm -rf .next && cp -r /c/dev/2021-xps/json-business/site/.next . && cp -r /c/dev/2021-xps/json-business/site/public .",
     "sls:deploy": "sls deploy --verbose --stage prod",
-    "sls:logs": "sls logs -f anyPath -t"
+    "sls:logs": "sls logs -f anyPath -t",
+    "start:prod": "cross-env NODE_ENV=production node server.mjs"
   },
   "devDependencies": {
     "serverless-bundle": "^5.3.0"
@@ -12,7 +13,11 @@
   "dependencies": {
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
+    "marked": "^4.0.14",
     "mime-types": "^2.1.35",
+    "next": "^12.1.5",
+    "next-themes": "^0.1.1",
+    "nprogress": "^0.2.0",
     "serverless-dotenv": "^1.0.0-beta.2"
   }
 }

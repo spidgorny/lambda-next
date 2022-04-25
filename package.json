@@ -3,12 +3,14 @@
   "scripts": {
     "dev": "node lambda-express.mjs",
     "prepare": "rm -rf .next && cp -r /c/dev/2021-xps/json-business/site/.next . && cp -r /c/dev/2021-xps/json-business/site/public .",
+    "prepare2": "rm -rf .next && cp -r ../.next . && cp -r ../public . && rm -rf .next/cache",
     "sls:deploy": "sls deploy --verbose --stage prod",
     "sls:logs": "sls logs -f anyPath -t",
     "start:prod": "cross-env NODE_ENV=production node server.mjs"
   },
   "devDependencies": {
-    "serverless-bundle": "^5.3.0"
+    "serverless-bundle": "^5.3.0",
+    "webpack": "^5.72.0"
   },
   "dependencies": {
     "dotenv": "^16.0.0",

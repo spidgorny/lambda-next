@@ -1,9 +1,25 @@
 import fs from 'fs';
 import {FakeRequest} from "./fake-request.mjs";
 import {FakeResponse} from "./fake-response.mjs";
-import { lambdaRouter, makeJsonOutput } from "./router.mjs";
+import {lambdaRouter, makeJsonOutput} from "./router.mjs";
 import next from "next";
-import { parse } from "url";
+import {parse} from "url";
+
+export const nextServer = async (event) => {
+	const req = new FakeRequest(event);
+	const res = new FakeResponse();
+	const dev = true;
+	const hostname = event.requestContext.domainName;
+	const port = 443;
+	const app = next({
+		dev, hostname, port,
+		dir: ".."
+	});
+	const handle = app.getRequestHandler();
+	const parsedUrl = parse(req.url, true);
+	await handle(req, res, parsedUrl);
+	return res.makeLambdaOutput();
+}
 
 export const server = async (event) => {
 	try {
@@ -21,7 +37,8 @@ export const server = async (event) => {
 		// await lambdaRouter(req, res);
 
 		const dev = process.env.NODE_ENV !== 'production';
-		const app = next({dev,
+		const app = next({
+			dev,
 			// dir: '.next/server'
 		});
 		const handle = app.getRequestHandler();
